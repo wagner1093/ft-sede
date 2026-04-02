@@ -5,14 +5,17 @@
 @tailwind utilities;
 
 @layer base {
-  html, body {
+  html {
     @apply overflow-x-hidden max-w-full;
     width: 100%;
     -webkit-tap-highlight-color: transparent;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: none;
+    scroll-behavior: smooth;
   }
   
   body {
-    @apply antialiased text-slate-900 bg-[#F7F7F7] font-sans;
+    @apply antialiased text-slate-900 bg-[#F7F7F7] font-sans overflow-x-hidden max-w-full;
   }
   
   h1, h2, h3, h4, h5, h6 {

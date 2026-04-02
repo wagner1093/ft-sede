@@ -13,7 +13,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 px-4 py-3 bg-white/80 backdrop-blur-md border-b border-slate-200 transition-all font-sans will-change-[transform,opacity]">
+    <header className="sticky top-0 z-50 px-4 py-3 bg-white/80 backdrop-blur-md border-b border-slate-200 transition-all font-sans">
       <div className="max-w-5xl mx-auto flex items-center justify-between overflow-hidden">
         <Link to="/membros" className="flex items-center gap-2.5 group">
           <img src="/logo.png" alt="Logo" className="w-10 h-10 object-contain" />

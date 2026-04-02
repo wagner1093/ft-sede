@@ -120,7 +120,7 @@ export default function TabelaMembros() {
   const batizadosEspirito = membros.filter(m => m.batismo_espirito_santo).length;
 
   return (
-    <div className="space-y-6 pb-8">
+    <div className="space-y-6 pb-8 touch-pan-y">
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {[
