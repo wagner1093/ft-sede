@@ -88,7 +88,7 @@ export default function FormMembro({ membro }: Props) {
     { id: 'instagram',             label: 'Instagram',              type: 'text', placeholder: '@usuario',            span2: false },
     { id: 'responsavel_nome',      label: 'Responsável (nome)',     type: 'text', placeholder: 'Nome do responsável', span2: false },
     { id: 'responsavel_telefone',  label: 'Número do responsável',  type: 'text', placeholder: '(11) 99999-9999',     span2: false },
-    { id: 'data_nascimento',       label: 'Data de Nascimento',     type: 'date', placeholder: '',                    span2: false },
+    { id: 'data_nascimento',       label: 'Data de Nascimento',     type: 'text', placeholder: 'Ex: 15/03/1995',         span2: false },
   ] as const;
 
   return (
@@ -129,11 +129,8 @@ export default function FormMembro({ membro }: Props) {
           ))}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Setor</label>
-            <select {...register('setor')}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white">
-              <option value="">Selecione o setor</option>
-              {SETORES.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
+            <input {...register('setor')} type="text" placeholder="Ex: Sede, Fortaleça, Garcia"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" />
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Status</label>
