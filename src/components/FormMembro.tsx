@@ -129,7 +129,7 @@ export default function FormMembro({ membro }: Props) {
           ))}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1.5">Setor</label>
-            <input {...register('setor')} type="text" placeholder="Ex: Sede, Fortaleça, Garcia"
+            <input {...register('setor')} type="text" placeholder="Ex: Sede, Fortaleza, Garcia"
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" />
           </div>
           <div>
