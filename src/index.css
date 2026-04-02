@@ -192,9 +192,6 @@ img, svg, video, canvas, audio, iframe, embed, object {
   position: relative;
   width: 100px;
   height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .loader-wrapper .packman::before {
@@ -233,24 +230,35 @@ img, svg, video, canvas, audio, iframe, embed, object {
   100% { transform: translate(-50%, 50%) rotate(0) }
 }
 
-.dots {
-  position: absolute;
-  left: 30px;
-  display: flex;
-  gap: 20px;
-}
-
 .dots .dot {
+  position: absolute;
+  z-index: -1;
+  top: 8px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background: #fff;
 }
 
-.dots .dot:nth-child(1) { animation: dot-stage1 0.5s infinite; }
-.dots .dot:nth-child(2) { animation: dot-stage1 0.5s infinite; }
-.dots .dot:nth-child(3) { animation: dot-stage1 0.5s infinite; }
-.dots .dot:nth-child(4) { animation: dot-stage2 0.5s infinite; }
+.dots .dot:nth-child(1) {
+  left: 90px;
+  animation: dot-stage1 0.5s infinite;
+}
+
+.dots .dot:nth-child(2) {
+  left: 60px;
+  animation: dot-stage1 0.5s infinite;
+}
+
+.dots .dot:nth-child(3) {
+  left: 30px;
+  animation: dot-stage1 0.5s infinite;
+}
+
+.dots .dot:nth-child(4) {
+  left: 10px;
+  animation: dot-stage2 0.5s infinite;
+}
 
 @keyframes dot-stage1 {
   0% { transform: translate(0, 0); }
