@@ -194,6 +194,12 @@ img, svg, video, canvas, audio, iframe, embed, object {
   height: 50px;
 }
 
+.loader-wrapper .packman {
+  position: absolute;
+  top: 13px; /* Alinhado com o centro dos pontos (top: 8px + 5px de raio) */
+  left: 0;
+}
+
 .loader-wrapper .packman::before {
   content: '';
   position: absolute;
