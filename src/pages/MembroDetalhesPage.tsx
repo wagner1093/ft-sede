@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { supabase } from '../lib/supabase';
 import type { Membro } from '../lib/types';
-import { User, MessageCircle, Instagram, Phone, Calendar, MapPin, CheckCircle2, XCircle, ArrowLeft, UserCog, Droplets, Flame, CalendarCheck, Briefcase } from 'lucide-react';
+import { User, MessageCircle, Instagram, Phone, Calendar, MapPin, ArrowLeft, UserCog, Droplets, Flame, CalendarCheck, Briefcase, XCircle } from 'lucide-react';
 
 const TAG_STYLE = 'bg-slate-100/50 text-slate-500 border-slate-200';
 const BADGE_BASE = 'px-4 py-1.5 rounded-xl border text-[10px] font-semibold uppercase tracking-widest transition-all font-sans';
@@ -68,10 +68,6 @@ export default function MembroDetalhesPage() {
                 : <User className="w-12 h-12 text-slate-400" />
               }
             </div>
-            {/* Status indicator badge (over the image) */}
-            <div className={`absolute -bottom-2 -right-2 z-20 flex items-center justify-center w-10 h-10 rounded-2xl border-4 border-white ${membro.status === 'ativo' ? 'bg-emerald-500' : 'bg-slate-400 shadow-sm'}`}>
-              {membro.status === 'ativo' ? <CheckCircle2 className="w-5 h-5 text-white" /> : <XCircle className="w-5 h-5 text-white" />}
-            </div>
           </div>
 
           <div className="text-center sm:text-left flex-1 pt-2">
@@ -94,10 +90,6 @@ export default function MembroDetalhesPage() {
                   LÍDER
                 </span>
               )}
-              <span className={`px-4 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest ${
-                membro.status === 'ativo' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-slate-500/10 text-slate-600 dark:text-slate-400'}`}>
-                {membro.status === 'ativo' ? 'Membro Ativo' : 'Inativo'}
-              </span>
             </div>
           </div>
           

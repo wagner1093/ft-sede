@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Users, Plus, LogOut } from 'lucide-react';
+import { Users, LogOut } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function Navbar() {
@@ -28,12 +28,6 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link to="/membros/novo" 
-              className="flex items-center gap-2 bg-[#b3f516] hover:bg-[#a3e114] text-black px-4 py-2 rounded-full text-sm font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-sm shadow-[#b3f516]/5">
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Novo</span>
-            </Link>
-            
             <button onClick={handleLogout}
               className="flex items-center gap-2 px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-full text-sm font-bold shadow-md active:scale-95 transition-all group">
               <LogOut className="w-4 h-4 transition-transform group-hover:translate-x-1" />

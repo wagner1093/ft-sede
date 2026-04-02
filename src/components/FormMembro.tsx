@@ -314,21 +314,6 @@ export default function FormMembro({ membro }: Props) {
               </div>
             </>
           )}
-
-          {/* 14. Status */}
-          <div className="space-y-2">
-            <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-4 font-sans">Membro ativo ou não</label>
-            <div className="relative">
-              <select {...register('status')}
-                className="w-full px-6 py-3 rounded-full bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-sm appearance-none cursor-pointer font-sans">
-                <option value="ativo" className="bg-white font-sans">Membro Ativo</option>
-                <option value="inativo" className="bg-white font-sans">Membro Inativo</option>
-              </select>
-              <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
