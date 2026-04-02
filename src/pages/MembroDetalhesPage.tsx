@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import Navbar from '../components/Navbar';
 import { supabase } from '../lib/supabase';
 import type { Membro } from '../lib/types';
-import { User, MessageCircle, Instagram, Phone, Calendar, MapPin, ArrowLeft, UserCog, Droplets, Flame, CalendarCheck, Briefcase, XCircle } from 'lucide-react';
+import { User, MessageCircle, Instagram, Phone, Calendar, MapPin, ArrowLeft, UserCog, Droplets, Flame, CalendarCheck, Briefcase, XCircle, Trash2 } from 'lucide-react';
 
 const TAG_STYLE = 'bg-slate-100/50 text-slate-500 border-slate-200';
 const BADGE_BASE = 'px-4 py-1.5 rounded-xl border text-[10px] font-semibold uppercase tracking-widest transition-all font-sans';
@@ -23,6 +24,20 @@ export default function MembroDetalhesPage() {
       setLoading(false);
     });
   }, [id, navigate]);
+
+  async function handleDelete() {
+    if (!membro) return;
+    const confirm = window.confirm(`Tem certeza que deseja excluir o cadastro de "${membro.nome}"? Esta ação não pode ser desfeita.`);
+    if (!confirm) return;
+
+    const { error } = await supabase.from('membros').delete().eq('id', membro.id);
+    if (error) {
+      toast.error('Erro ao excluir membro.');
+    } else {
+      toast.success('Cadastro excluído com sucesso.');
+      navigate('/membros');
+    }
+  }
 
   if (loading) return (
     <><Navbar /><div className="flex justify-center flex-col items-center min-h-[80vh]"><span className="w-8 h-8 border-4 border-slate-200/50 dark:border-zinc-800 border-t-primary-500 rounded-full animate-spin" /><p className="mt-4 text-slate-500 dark:text-zinc-500 font-medium animate-pulse">Carregando dados do membro...</p></div></>
@@ -93,11 +108,16 @@ export default function MembroDetalhesPage() {
             </div>
           </div>
           
-          <div className="sm:self-center mt-2 sm:mt-0">
+          <div className="flex flex-col sm:flex-row items-center gap-3 mt-4 sm:mt-0 sm:self-center">
             <Link to={`/membros/${membro.id}/editar`}
               className="flex items-center justify-center gap-2.5 px-6 py-3.5 bg-[#b3f516] hover:bg-[#a3e114] text-black rounded-2xl text-sm font-bold shadow-md shadow-[#b3f516]/5 transition-all hover:scale-[1.03] active:scale-95 group">
               <UserCog className="w-5 h-5 transition-transform group-hover:rotate-12" /> Editar Perfil
             </Link>
+
+            <button onClick={handleDelete}
+              className="flex items-center justify-center gap-2.5 px-6 py-3.5 bg-white border border-slate-200 text-slate-500 hover:text-red-600 hover:bg-red-50 hover:border-red-100 rounded-2xl text-sm font-bold transition-all hover:scale-[1.03] active:scale-95 group shadow-sm">
+              <Trash2 className="w-5 h-5 transition-transform group-hover:scale-110" /> Excluir Cadastro
+            </button>
           </div>
         </div>
 
