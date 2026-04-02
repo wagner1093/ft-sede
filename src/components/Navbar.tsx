@@ -17,7 +17,7 @@ export default function Navbar() {
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         <Link to="/membros" className="flex items-center gap-2.5 group">
           <img src="/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
-          <span className="text-xl font-black text-slate-900 tracking-tighter font-display uppercase">FT-SEDE</span>
+          <span className="text-xl font-black text-slate-900 tracking-tighter font-display uppercase">FT SEDE</span>
         </Link>
 
         <nav className="flex items-center gap-2">

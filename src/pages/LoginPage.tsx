@@ -30,7 +30,7 @@ export default function LoginPage() {
           <div className="flex items-center justify-center mx-auto mb-6">
             <img src="/logo.png" alt="Logo" className="w-28 h-28 object-contain" />
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tighter italic font-display">FT-SEDE</h1>
+          <h1 className="text-3xl font-black text-white tracking-tighter italic font-display">FT SEDE</h1>
         </div>
 
         <div className="space-y-6">
@@ -72,7 +72,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-zinc-700 text-[10px] mt-20 font-medium tracking-widest uppercase">
-          &copy; {new Date().getFullYear()} FT-SEDE • Sede Digital
+          &copy; {new Date().getFullYear()} FT SEDE • Sede Digital
         </p>
       </div>
     </div>
