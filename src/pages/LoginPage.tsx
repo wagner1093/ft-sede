@@ -42,7 +42,7 @@ export default function LoginPage() {
           />
           <div className="mt-8 flex flex-col items-center gap-2">
             <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
-              Carregando Ecossistema
+              Carregando
             </p>
             <div className="h-0.5 w-24 bg-white/5 overflow-hidden rounded-full relative">
               <div className="absolute inset-0 bg-[#b3f516] animate-progress-fast" />
