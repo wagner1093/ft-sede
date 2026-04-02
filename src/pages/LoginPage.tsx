@@ -5,44 +5,25 @@ import toast from 'react-hot-toast';
 import { Users, Eye, EyeOff } from 'lucide-react';
 
 export default function LoginPage() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showSuccessLoader, setShowSuccessLoader] = useState(false);
+  const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       
-      setShowSuccessLoader(true);
-      setTimeout(() => {
-        navigate('/membros');
-      }, 3000);
+      navigate('/membros');
     } catch (error: any) {
       toast.error('Email ou senha incorretos.');
       setLoading(false);
     }
-  }
-
-  if (showSuccessLoader) {
-    return (
-      <div className="pacman-overlay">
-        <div className="loader-wrapper">
-          <div className="packman" />
-          <div className="dots">
-            <div className="dot" />
-            <div className="dot" />
-            <div className="dot" />
-            <div className="dot" />
-          </div>
-        </div>
-      </div>
-    );
   }
 
   return (
