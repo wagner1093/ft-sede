@@ -182,3 +182,26 @@ img, svg, video, canvas, audio, iframe, embed, object {
   fill: rgb(175, 175, 175);
   transition: fill 0.2s;
 }
+
+/* Logo Rotation Loader */
+.logo-loader-overlay {
+  @apply fixed inset-0 z-[300] flex flex-col items-center justify-center bg-[#050505] animate-fade-in;
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-progress-fast {
+  animation: progress 4s linear forwards;
+}
+
+@keyframes progress {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
+}

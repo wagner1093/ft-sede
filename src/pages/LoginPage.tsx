@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import toast from 'react-hot-toast';
 import { Users, Eye, EyeOff } from 'lucide-react';
+import logo from '../assets/logo-ftsede.png';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showSuccessLoader, setShowSuccessLoader] = useState(false);
   const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
@@ -19,11 +21,36 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       
-      navigate('/membros');
+      setShowSuccessLoader(true);
+      setTimeout(() => {
+        navigate('/membros');
+      }, 4000);
     } catch (error: any) {
       toast.error('Email ou senha incorretos.');
       setLoading(false);
     }
+  }
+
+  if (showSuccessLoader) {
+    return (
+      <div className="logo-loader-overlay">
+        <div className="relative">
+          <img 
+            src={logo} 
+            alt="Logo FT SEDE" 
+            className="w-32 h-32 md:w-48 md:h-48 object-contain animate-spin-slow"
+          />
+          <div className="mt-8 flex flex-col items-center gap-2">
+            <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em] animate-pulse">
+              Carregando Ecossistema
+            </p>
+            <div className="h-0.5 w-24 bg-white/5 overflow-hidden rounded-full relative">
+              <div className="absolute inset-0 bg-[#b3f516] animate-progress-fast" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
