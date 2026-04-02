@@ -15,6 +15,7 @@ export default function MembroDetalhesPage() {
   const [membro, setMembro] = useState<Membro | null>(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -27,9 +28,9 @@ export default function MembroDetalhesPage() {
 
   async function handleDelete() {
     if (!membro) return;
-    const confirm = window.confirm(`Tem certeza que deseja excluir o cadastro de "${membro.nome}"? Esta ação não pode ser desfeita.`);
-    if (!confirm) return;
-
+    
+    // Agora a exclusão acontece sem o window.confirm aqui, 
+    // pois o usuário já confirmou no modal customizado.
     const { error } = await supabase.from('membros').delete().eq('id', membro.id);
     if (error) {
       toast.error('Erro ao excluir membro.');
@@ -114,7 +115,7 @@ export default function MembroDetalhesPage() {
               <UserCog className="w-5 h-5 transition-transform group-hover:rotate-12" /> Editar Perfil
             </Link>
 
-            <button onClick={handleDelete}
+            <button onClick={() => setShowDeleteConfirm(true)}
               className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-400 hover:text-red-600 hover:bg-red-50 hover:border-red-100 rounded-xl text-xs font-bold transition-all hover:scale-[1.02] active:scale-95 group shadow-sm">
               <Trash2 className="w-4 h-4 transition-transform group-hover:scale-110" /> Excluir Cadastro
             </button>
@@ -141,7 +142,7 @@ export default function MembroDetalhesPage() {
         )}
       </main>
 
-      {/* Modal de Visualização */}
+      {/* Modal de Visualização da Foto */}
       {showModal && membro.foto_url && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-fade-in"
           onClick={() => setShowModal(false)}>
@@ -154,6 +155,33 @@ export default function MembroDetalhesPage() {
             className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl animate-zoom-in"
             onClick={(e) => e.stopPropagation()} 
           />
+        </div>
+      )}
+
+      {/* Modal de Confirmação de Exclusão (Uiverse.io design) */}
+      {showDeleteConfirm && (
+        <div className="delete-confirm-overlay" onClick={() => setShowDeleteConfirm(false)}>
+          <div className="delete-confirm-card" onClick={(e) => e.stopPropagation()}>
+            <button className="exit-button" onClick={() => setShowDeleteConfirm(false)}>
+              <svg height="20" width="20" viewBox="0 0 20 20">
+                <path d="M15.8333 5.34167L14.6583 4.16667L10 8.825L5.34167 4.16667L4.16667 5.34167L8.825 10L4.16667 14.6583L5.34167 15.8333L10 11.175L14.6583 15.8333L15.8333 14.6583L11.175 10L15.8333 5.34167Z" />
+              </svg>
+            </button>
+            <div className="card-content">
+              <p className="card-heading">Excluir Cadastro?</p>
+              <p className="card-description">
+                Tem certeza que deseja excluir o cadastro de <strong>{membro.nome}</strong>? Esta ação não poderá ser desfeita.
+              </p>
+            </div>
+            <div className="card-button-wrapper">
+              <button className="card-button secondary" onClick={() => setShowDeleteConfirm(false)}>
+                Cancelar
+              </button>
+              <button className="card-button primary" onClick={handleDelete}>
+                Excluir
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -65,3 +65,120 @@ img, svg, video, canvas, audio, iframe, embed, object {
   display: block;
   vertical-align: middle;
 }
+
+/* Delete Confirm Modal (Uiverse.io design) */
+.delete-confirm-overlay {
+  @apply fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-[2px] animate-fade-in;
+}
+
+.delete-confirm-card {
+  width: 320px;
+  height: fit-content;
+  background: rgb(255, 255, 255);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  animation: zoom-in 0.2s ease-out;
+}
+
+.delete-confirm-card .card-content {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+
+.delete-confirm-card .card-heading {
+  font-size: 22px;
+  font-weight: 800;
+  color: rgb(27, 27, 27);
+  font-family: 'Sora', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.delete-confirm-card .card-description {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(100, 116, 139);
+  line-height: 1.5;
+  font-family: 'Inter', sans-serif;
+}
+
+.delete-confirm-card .card-button-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.delete-confirm-card .card-button {
+  width: 50%;
+  height: 48px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+
+.delete-confirm-card .primary {
+  background-color: rgb(255, 114, 109);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 114, 109, 0.3);
+}
+
+.delete-confirm-card .primary:hover {
+  background-color: rgb(255, 73, 66);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 114, 109, 0.4);
+}
+
+.delete-confirm-card .secondary {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.delete-confirm-card .secondary:hover {
+  background-color: #e2e8f0;
+  color: #475569;
+}
+
+.delete-confirm-card .exit-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.delete-confirm-card .exit-button:hover {
+  background-color: #f8fafc;
+}
+
+.delete-confirm-card .exit-button:hover svg {
+  fill: #000;
+}
+
+.delete-confirm-card .exit-button svg {
+  fill: rgb(175, 175, 175);
+  transition: fill 0.2s;
+}
