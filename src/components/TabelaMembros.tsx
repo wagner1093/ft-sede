@@ -5,12 +5,18 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import type { Membro } from '../lib/types';
 import toast from 'react-hot-toast';
-import { Search, Plus, MessageCircle, Users, UserCheck, UserX, ChevronRight, Trash2, Filter, XCircle } from 'lucide-react';
+import { Search, Plus, MessageCircle, Users, UserCheck, UserX, ChevronRight, Trash2, Filter, XCircle, Droplets, Flame, HandHelping, Camera, Heart, Music, Zap, Star } from 'lucide-react';
 
-const SETOR_COLORS: Record<string, string> = {
-  'Sede':      'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  'Fortaleza': 'bg-primary-500/10 text-primary-400 border-primary-500/20',
-  'Garcia':    'bg-purple-500/10 text-purple-400 border-purple-500/20',
+const TAG_STYLE = 'bg-slate-100 text-slate-500 border-slate-200';
+const BADGE_BASE = 'text-[9px] font-semibold uppercase tracking-widest px-2.5 py-1 rounded-lg border transition-all font-sans';
+
+const DEPT_INFO: Record<string, { icon: any, color: string }> = {
+  'Intercessão': { icon: HandHelping, color: 'text-emerald-500' },
+  'Mídia':       { icon: Camera,      color: 'text-indigo-500' },
+  'Acolhimento': { icon: Heart,       color: 'text-rose-500' },
+  'Banda':       { icon: Music,       color: 'text-purple-500' },
+  'Líder ft Sede': { icon: Zap,         color: 'text-amber-500' },
+  'PGs':         { icon: Users,       color: 'text-blue-500' },
 };
 
 export default function TabelaMembros() {
@@ -132,20 +138,49 @@ export default function TabelaMembros() {
                   </div>
 
                   <div className="flex-1 min-w-0 font-sans">
-                    <p className="text-base font-bold text-slate-900 truncate group-hover:text-primary-600 transition-colors">
-                      {m.nome}
-                    </p>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
-                      {m.whatsapp && (
-                        <span className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
-                          <MessageCircle className="w-3.5 h-3.5 text-primary-500" /> {m.whatsapp}
-                        </span>
-                      )}
-                      {m.setor && (
-                        <span className={`text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-lg border font-black ${SETOR_COLORS[m.setor] ?? 'bg-slate-100 text-slate-600 border-slate-200'}`}>
-                          {m.setor}
-                        </span>
-                      )}
+                    <div className="flex items-center gap-2">
+                      <p className="text-base font-bold text-slate-900 truncate group-hover:text-primary-600 transition-colors">
+                        {m.nome}
+                      </p>
+                      
+                      {/* Status Badges Row */}
+                      <div className="flex items-center gap-1.5 flex-shrink-0">
+                        {m.batismo_aguas && (
+                          <Droplets className="w-3.5 h-3.5 text-blue-500 animate-float-slow" />
+                        )}
+                        {m.batismo_espirito_santo && (
+                          <Flame className="w-3.5 h-3.5 text-orange-500 animate-flicker-slow" />
+                        )}
+                        {m.serve_departamento && m.departamento && DEPT_INFO[m.departamento] && (
+                          <div className={DEPT_INFO[m.departamento].color}>
+                            {(() => {
+                              const DeptIcon = DEPT_INFO[m.departamento].icon;
+                              return <DeptIcon className="w-3.5 h-3.5" />;
+                            })()}
+                          </div>
+                        )}
+                        {m.departamento_lider && (
+                          <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500 animate-pulse" />
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
+                        {m.setor && (
+                          <span className={`${BADGE_BASE} ${TAG_STYLE}`}>
+                            {m.setor}
+                          </span>
+                        )}
+                        {m.serve_departamento && m.departamento && (
+                          <span className={`${BADGE_BASE} ${TAG_STYLE}`}>
+                            {m.departamento}
+                          </span>
+                        )}
+                        {m.departamento_lider && (
+                          <span className={`${BADGE_BASE} border-emerald-200 bg-emerald-50 text-emerald-600`}>
+                            Líder
+                          </span>
+                        )}
                     </div>
                   </div>
 

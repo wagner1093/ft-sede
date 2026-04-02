@@ -13,8 +13,14 @@ export interface Membro {
   responsavel_nome?: string;
   responsavel_telefone?: string;
   setor?: string;
+  serve_departamento: boolean;
+  departamento?: string;
+  departamento_lider: boolean;
   foto_url?: string;
   data_nascimento?: string;
+  batismo_aguas: boolean;
+  batismo_aguas_data?: string;
+  batismo_espirito_santo: boolean;
   grupo_id?: string;
   status: 'ativo' | 'inativo';
   created_at: string;

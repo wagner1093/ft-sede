@@ -8,8 +8,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        display: ['Outfit', 'sans-serif'],
+        sans: ['Sora', 'sans-serif'],
+        display: ['Sora', 'sans-serif'],
       },
       colors: {
         // Cor primária baseada no Verde Limão do design

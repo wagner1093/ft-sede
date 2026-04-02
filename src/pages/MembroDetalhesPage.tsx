@@ -3,13 +3,10 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { supabase } from '../lib/supabase';
 import type { Membro } from '../lib/types';
-import { User, MessageCircle, Instagram, Phone, Calendar, MapPin, CheckCircle2, XCircle, ArrowLeft, UserCog } from 'lucide-react';
+import { User, MessageCircle, Instagram, Phone, Calendar, MapPin, CheckCircle2, XCircle, ArrowLeft, UserCog, Droplets, Flame, CalendarCheck, Briefcase } from 'lucide-react';
 
-const SETOR_COLORS: Record<string, string> = {
-  'Sede':      'bg-blue-500/10 text-blue-500 border-blue-500/20',
-  'Fortaleza': 'bg-primary-500/10 text-primary-500 border-primary-500/20',
-  'Garcia':    'bg-purple-500/10 text-purple-500 border-purple-500/20',
-};
+const TAG_STYLE = 'bg-slate-100/50 text-slate-500 border-slate-200';
+const BADGE_BASE = 'px-4 py-1.5 rounded-xl border text-[10px] font-semibold uppercase tracking-widest transition-all font-sans';
 
 export default function MembroDetalhesPage() {
   const { id } = useParams<{ id: string }>();
@@ -33,13 +30,18 @@ export default function MembroDetalhesPage() {
   if (!membro) return null;
 
   const infos = [
-    { icon: MessageCircle, label: 'WhatsApp',              value: membro.whatsapp },
-    { icon: Instagram,     label: 'Instagram',             value: membro.instagram },
-    { icon: User,          label: 'Responsável',           value: membro.responsavel_nome },
-    { icon: Phone,         label: 'Número do responsável', value: membro.responsavel_telefone },
-    { icon: Calendar,      label: 'Nascimento',            value: membro.data_nascimento
+    { icon: MessageCircle, label: 'WhatsApp',               value: membro.whatsapp },
+    { icon: Instagram,     label: 'Instagram',              value: membro.instagram },
+    { icon: User,          label: 'Responsável',            value: membro.responsavel_nome },
+    { icon: Phone,         label: 'Número do responsável',  value: membro.responsavel_telefone },
+    { icon: Calendar,      label: 'Nascimento',             value: membro.data_nascimento
         ? new Date(membro.data_nascimento + 'T00:00:00').toLocaleDateString('pt-BR') : null },
-    { icon: MapPin,        label: 'Setor',                 value: membro.setor },
+    { icon: Droplets,      label: 'Batismo em Águas',       value: membro.batismo_aguas ? 'Sim' : 'Não', iconClass: 'animate-float-slow text-blue-500 group-hover:text-blue-600' },
+    { icon: CalendarCheck, label: 'Data do Batismo',        value: membro.batismo_aguas_data
+        ? new Date(membro.batismo_aguas_data + 'T00:00:00').toLocaleDateString('pt-BR') : null },
+    { icon: Flame,         label: 'Batismo no Espír. Santo', value: membro.batismo_espirito_santo ? 'Sim' : 'Não', iconClass: 'animate-flicker-slow text-orange-500 group-hover:text-orange-600' },
+    { icon: Briefcase,     label: 'Departamento',           value: membro.serve_departamento && membro.departamento ? `${membro.departamento} ${membro.departamento_lider ? '(Líder)' : ''}` : 'Não atua em departamentos' },
+    { icon: MapPin,        label: 'Setor',                  value: membro.setor },
   ].filter(i => i.value);
 
   return (
@@ -78,8 +80,18 @@ export default function MembroDetalhesPage() {
             
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-4">
               {membro.setor && (
-                <span className={`px-4 py-1.5 rounded-xl border text-xs font-black uppercase tracking-widest ${SETOR_COLORS[membro.setor] ?? 'bg-slate-100 text-slate-600 border-slate-200'}`}>
-                  Setor: {membro.setor}
+                <span className={`${BADGE_BASE} ${TAG_STYLE}`}>
+                  {membro.setor}
+                </span>
+              )}
+              {membro.serve_departamento && membro.departamento && (
+                <span className={`${BADGE_BASE} ${TAG_STYLE}`}>
+                   {membro.departamento}
+                </span>
+              )}
+              {membro.departamento_lider && (
+                <span className={`${BADGE_BASE} border-emerald-200 bg-emerald-50 text-emerald-600`}>
+                  LÍDER
                 </span>
               )}
               <span className={`px-4 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest ${
@@ -101,10 +113,10 @@ export default function MembroDetalhesPage() {
           <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-8">
             <h2 className="text-xl font-bold text-slate-900 mb-8 border-b border-slate-100 pb-4 font-display">Detalhes Cadastrais</h2>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-6">
-              {infos.map(({ icon: Icon, label, value }) => (
+              {infos.map(({ icon: Icon, label, value, iconClass }) => (
                 <div key={label} className="flex items-start gap-4 p-4 rounded-full hover:bg-slate-50 transition-all group">
                   <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-500/20 transition-colors">
-                    <Icon className="w-5 h-5 text-slate-500 group-hover:text-primary-600 transition-colors" />
+                    <Icon className={`w-5 h-5 transition-colors ${iconClass || 'text-slate-500 group-hover:text-primary-600'}`} />
                   </div>
                   <div className="pt-1 select-text">
                     <dt className="text-[10px] font-black uppercase tracking-widest text-slate-500">{label}</dt>
