@@ -13,25 +13,33 @@ export default function Navbar() {
   }
 
   return (
-    <header className="bg-white border-b border-slate-100 sticky top-0 z-40">
-      <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link to="/membros" className="flex items-center gap-2 font-bold text-slate-900">
-          <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
-            <Users className="w-4 h-4 text-white" />
-          </div>
-          FT-SEDE
+    <header className="sticky top-0 z-50 px-4 py-3 bg-white/80 backdrop-blur-md border-b border-slate-200 transition-all font-sans">
+      <div className="max-w-5xl mx-auto flex items-center justify-between">
+        <Link to="/membros" className="flex items-center gap-2.5 group">
+          <img src="/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
+          <span className="text-xl font-black text-slate-900 tracking-tighter font-display uppercase">FT-SEDE</span>
         </Link>
-        <nav className="flex items-center gap-1">
-          <Link to="/membros" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-            <Users className="w-4 h-4" /> Membros
-          </Link>
-          <Link to="/membros/novo" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-            <Plus className="w-4 h-4" /> Novo Membro
-          </Link>
-          <button onClick={handleLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-red-500 hover:bg-red-50 transition-colors ml-1">
-            <LogOut className="w-4 h-4" /> Sair
-          </button>
+
+        <nav className="flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-1 mr-2 pr-2 border-r border-slate-200">
+            <Link to="/membros" className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
+              <Users className="w-4 h-4" /> Membros
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Link to="/membros/novo" 
+              className="flex items-center gap-2 bg-[#b3f516] hover:bg-[#a3e114] text-black px-4 py-2 rounded-full text-sm font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-sm shadow-[#b3f516]/5">
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">Novo</span>
+            </Link>
+            
+            <button onClick={handleLogout}
+              className="flex items-center gap-2 px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-full text-sm font-bold shadow-md active:scale-95 transition-all group">
+              <LogOut className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              Sair
+            </button>
+          </div>
         </nav>
       </div>
     </header>

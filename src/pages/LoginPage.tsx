@@ -24,57 +24,56 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-200">
-            <Users className="w-8 h-8 text-white" />
+    <div className="min-h-screen relative flex items-center justify-center p-4 bg-[#050505] transition-all">
+      <div className="w-full max-w-[400px] animate-fade-in relative">
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center mx-auto mb-6">
+            <img src="/logo.png" alt="Logo" className="w-28 h-28 object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">FT-SEDE</h1>
-          <p className="text-slate-500 text-sm mt-1">Sistema de Gerenciamento de Membros</p>
+          <h1 className="text-3xl font-black text-white tracking-tighter italic font-display">FT-SEDE</h1>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8">
-          <h2 className="text-lg font-semibold text-slate-800 mb-6">Entrar na sua conta</h2>
+        <div className="space-y-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
-              <input
+            <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="seu@email.com"
+                placeholder="E-mail ou usuário"
                 required
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                className="w-full px-6 py-3 rounded-full bg-zinc-900 border border-zinc-800 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-700 transition-all"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Senha</label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  className="w-full px-3.5 py-2.5 pr-10 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-                />
-                <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="Senha"
+                required
+                className="w-full px-6 py-3 pr-14 rounded-full bg-zinc-900 border border-zinc-800 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-700 transition-all"
+              />
+              <button type="button" onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors">
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
             </div>
+            
             <button type="submit" id="btn-entrar" disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition-all mt-2 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              className="w-full bg-[#b3f516] hover:bg-[#a3e114] text-black font-bold py-3.5 rounded-full transition-all transform active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-4 shadow-md shadow-[#b3f516]/5">
               {loading
-                ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Entrando...</>
-                : 'Entrar'}
+                ? <><span className="w-5 h-5 border-3 border-black/20 border-t-black rounded-full animate-spin inline-block mr-2 align-middle" /> Entrando...</>
+                : 'FAZER LOGIN'}
             </button>
           </form>
         </div>
+
+        <p className="text-center text-zinc-700 text-[10px] mt-20 font-medium tracking-widest uppercase">
+          &copy; {new Date().getFullYear()} FT-SEDE • Sede Digital
+        </p>
       </div>
     </div>
   );

@@ -6,9 +6,9 @@ import type { Membro } from '../lib/types';
 import { User, MessageCircle, Instagram, Phone, Calendar, MapPin, CheckCircle2, XCircle, ArrowLeft, UserCog } from 'lucide-react';
 
 const SETOR_COLORS: Record<string, string> = {
-  'Sede':      'bg-blue-100 text-blue-700',
-  'Fortaleça': 'bg-purple-100 text-purple-700',
-  'Garcia':    'bg-emerald-100 text-emerald-700',
+  'Sede':      'bg-blue-500/10 text-blue-500 border-blue-500/20',
+  'Fortaleza': 'bg-primary-500/10 text-primary-500 border-primary-500/20',
+  'Garcia':    'bg-purple-500/10 text-purple-500 border-purple-500/20',
 };
 
 export default function MembroDetalhesPage() {
@@ -16,6 +16,7 @@ export default function MembroDetalhesPage() {
   const navigate = useNavigate();
   const [membro, setMembro] = useState<Membro | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -27,7 +28,7 @@ export default function MembroDetalhesPage() {
   }, [id, navigate]);
 
   if (loading) return (
-    <><Navbar /><div className="flex justify-center py-24"><span className="w-6 h-6 border-2 border-blue-200 border-t-blue-600 rounded-full animate-spin" /></div></>
+    <><Navbar /><div className="flex justify-center flex-col items-center min-h-[80vh]"><span className="w-8 h-8 border-4 border-slate-200/50 dark:border-zinc-800 border-t-primary-500 rounded-full animate-spin" /><p className="mt-4 text-slate-500 dark:text-zinc-500 font-medium animate-pulse">Carregando dados do membro...</p></div></>
   );
   if (!membro) return null;
 
@@ -42,51 +43,72 @@ export default function MembroDetalhesPage() {
   ].filter(i => i.value);
 
   return (
-    <>
+    <div className="min-h-screen bg-[#F7F7F7] pb-12 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[50%] h-64 bg-primary-500/5 blur-[120px] rounded-full pointer-events-none" />
       <Navbar />
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-6">
-        <Link to="/membros" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-blue-600 transition-colors">
-          <ArrowLeft className="w-4 h-4" /> Voltar para lista
+
+      <main className="max-w-4xl mx-auto px-4 pt-8 space-y-6 relative z-10 animate-fade-in">
+        <Link to="/membros" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white border border-slate-200 text-sm font-bold text-slate-600 hover:text-primary-600 hover:bg-slate-50 transition-all shadow-sm active:scale-95 group">
+          <ArrowLeft className="w-4.5 h-4.5 transform group-hover:-translate-x-1 transition-transform" /> Voltar para Membros
         </Link>
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col sm:flex-row items-center gap-5">
-          <div className="w-24 h-24 rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0 flex items-center justify-center border border-slate-200">
-            {membro.foto_url
-              ? <img src={membro.foto_url} alt={membro.nome} className="w-full h-full object-cover" />
-              : <User className="w-10 h-10 text-slate-300" />
-            }
+        
+        {/* Profile Header Card */}
+        <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-8 flex flex-col sm:flex-row items-center sm:items-start gap-8 relative overflow-hidden">
+          
+          {/* Subtle accent line at top */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary-500/50 to-transparent opacity-50" />
+
+          <div className="relative">
+            <div className="w-32 h-32 rounded-3xl overflow-hidden bg-slate-100 flex-shrink-0 flex items-center justify-center ring-4 ring-white shadow-xl z-10 relative cursor-pointer group"
+              onClick={() => membro.foto_url && setShowModal(true)}>
+              {membro.foto_url
+                ? <img src={membro.foto_url} alt={membro.nome} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                : <User className="w-12 h-12 text-slate-400" />
+              }
+            </div>
+            {/* Status indicator badge (over the image) */}
+            <div className={`absolute -bottom-2 -right-2 z-20 flex items-center justify-center w-10 h-10 rounded-2xl border-4 border-white ${membro.status === 'ativo' ? 'bg-emerald-500' : 'bg-slate-400 shadow-sm'}`}>
+              {membro.status === 'ativo' ? <CheckCircle2 className="w-5 h-5 text-white" /> : <XCircle className="w-5 h-5 text-white" />}
+            </div>
           </div>
-          <div className="text-center sm:text-left flex-1">
-            <h1 className="text-2xl font-bold text-slate-900">{membro.nome}</h1>
-            {membro.setor && (
-              <span className={`inline-block mt-2 px-3 py-1 rounded-full text-xs font-semibold ${SETOR_COLORS[membro.setor] ?? 'bg-slate-100 text-slate-600'}`}>
-                {membro.setor}
-              </span>
-            )}
-            <div className="mt-3">
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
-                membro.status === 'ativo' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'}`}>
-                {membro.status === 'ativo' ? <CheckCircle2 className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
-                {membro.status === 'ativo' ? 'Ativo' : 'Inativo'}
+
+          <div className="text-center sm:text-left flex-1 pt-2">
+            <h1 className="text-4xl font-black text-slate-900 tracking-tight font-display">{membro.nome}</h1>
+            <p className="text-slate-500 font-medium font-sans">Membro desde {new Date(membro.created_at).toLocaleDateString('pt-BR')}</p>
+            
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-4">
+              {membro.setor && (
+                <span className={`px-4 py-1.5 rounded-xl border text-xs font-black uppercase tracking-widest ${SETOR_COLORS[membro.setor] ?? 'bg-slate-100 text-slate-600 border-slate-200'}`}>
+                  Setor: {membro.setor}
+                </span>
+              )}
+              <span className={`px-4 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest ${
+                membro.status === 'ativo' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-slate-500/10 text-slate-600 dark:text-slate-400'}`}>
+                {membro.status === 'ativo' ? 'Membro Ativo' : 'Inativo'}
               </span>
             </div>
           </div>
-          <Link to={`/membros/${membro.id}/editar`}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-medium transition-colors">
-            <UserCog className="w-4 h-4" /> Editar
-          </Link>
+          
+          <div className="sm:self-center mt-2 sm:mt-0">
+            <Link to={`/membros/${membro.id}/editar`}
+              className="flex items-center justify-center gap-2.5 px-6 py-3.5 bg-[#b3f516] hover:bg-[#a3e114] text-black rounded-2xl text-sm font-bold shadow-md shadow-[#b3f516]/5 transition-all hover:scale-[1.03] active:scale-95 group">
+              <UserCog className="w-5 h-5 transition-transform group-hover:rotate-12" /> Editar Perfil
+            </Link>
+          </div>
         </div>
+
         {infos.length > 0 && (
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-            <h2 className="font-semibold text-slate-800 mb-4">Informações</h2>
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-8">
+            <h2 className="text-xl font-bold text-slate-900 mb-8 border-b border-slate-100 pb-4 font-display">Detalhes Cadastrais</h2>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-y-8 gap-x-6">
               {infos.map(({ icon: Icon, label, value }) => (
-                <div key={label} className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Icon className="w-4 h-4 text-blue-600" />
+                <div key={label} className="flex items-start gap-4 p-4 rounded-full hover:bg-slate-50 transition-all group">
+                  <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-500/20 transition-colors">
+                    <Icon className="w-5 h-5 text-slate-500 group-hover:text-primary-600 transition-colors" />
                   </div>
-                  <div>
-                    <dt className="text-xs text-slate-400 font-medium uppercase tracking-wide">{label}</dt>
-                    <dd className="text-sm text-slate-800 mt-0.5">{value}</dd>
+                  <div className="pt-1 select-text">
+                    <dt className="text-[10px] font-black uppercase tracking-widest text-slate-500">{label}</dt>
+                    <dd className="text-base font-medium text-slate-900 mt-1">{value}</dd>
                   </div>
                 </div>
               ))}
@@ -94,6 +116,22 @@ export default function MembroDetalhesPage() {
           </div>
         )}
       </main>
-    </>
+
+      {/* Modal de Visualização */}
+      {showModal && membro.foto_url && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-fade-in"
+          onClick={() => setShowModal(false)}>
+          <button className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all shadow-lg">
+            <XCircle className="w-6 h-6" />
+          </button>
+          <img 
+            src={membro.foto_url} 
+            alt="Visualização" 
+            className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl animate-zoom-in"
+            onClick={(e) => e.stopPropagation()} 
+          />
+        </div>
+      )}
+    </div>
   );
 }

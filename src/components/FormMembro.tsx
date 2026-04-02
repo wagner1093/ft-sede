@@ -30,6 +30,7 @@ export default function FormMembro({ membro }: Props) {
   const [fotoFile, setFotoFile] = useState<File | null>(null);
   const [fotoPreview, setFotoPreview] = useState<string | null>(membro?.foto_url ?? null);
   const [saving, setSaving] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -92,70 +93,128 @@ export default function FormMembro({ membro }: Props) {
   ] as const;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 animate-fade-in">
       {/* Foto */}
-      <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
-        <h2 className="font-semibold text-slate-800 mb-4">Foto</h2>
-        <div className="flex items-center gap-4">
-          <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-200 flex-shrink-0 relative">
+      <div className="bg-white rounded-[2rem] border border-slate-200 p-8 shadow-sm">
+        <h2 className="text-lg font-bold text-slate-900 mb-6 tracking-tight font-display">Foto do Membro</h2>
+        <div className="flex flex-col sm:flex-row items-center gap-6">
+          <div className="w-32 h-32 rounded-3xl overflow-hidden bg-slate-50 flex items-center justify-center border-2 border-dashed border-slate-200 flex-shrink-0 relative group cursor-pointer"
+            onClick={() => fotoPreview && setShowModal(true)}>
             {fotoPreview
-              ? <><img src={fotoPreview} alt="preview" className="w-full h-full object-cover" />
-                  <button type="button" onClick={() => { setFotoFile(null); setFotoPreview(null); }}
-                    className="absolute top-0.5 right-0.5 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
-                    <X className="w-3 h-3 text-white" />
+              ? <><img src={fotoPreview} alt="preview" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                  <button type="button" onClick={(e) => { e.stopPropagation(); setFotoFile(null); setFotoPreview(null); }}
+                    className="absolute top-2 right-2 w-7 h-7 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center shadow-lg transition-colors z-10">
+                    <X className="w-4 h-4 text-white" />
                   </button></>
-              : <User className="w-8 h-8 text-slate-300" />
+              : <User className="w-12 h-12 text-slate-300" />
             }
           </div>
-          <label className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm font-medium hover:bg-blue-100 transition-colors border border-blue-100 cursor-pointer">
-            <ImagePlus className="w-4 h-4" />
-            {fotoPreview ? 'Trocar foto' : 'Adicionar foto'}
-            <input type="file" accept="image/*" className="hidden" onChange={handleFotoChange} />
-          </label>
+          <div className="flex flex-col items-center sm:items-start gap-2">
+            <label className="flex items-center gap-2.5 px-6 py-2 bg-[#b3f516] hover:bg-[#a3e114] text-black rounded-full text-sm font-bold shadow-md shadow-[#b3f516]/5 cursor-pointer transition-all hover:scale-[1.03] active:scale-95 group">
+              <ImagePlus className="w-4 h-4 transition-transform group-hover:rotate-12" />
+              {fotoPreview ? 'Trocar foto' : 'Adicionar foto'}
+              <input type="file" accept="image/*" className="hidden" onChange={handleFotoChange} />
+            </label>
+            <p className="text-xs text-slate-400 font-sans">Formatos aceitos: JPG, PNG. Máx 5MB.</p>
+          </div>
         </div>
       </div>
 
       {/* Dados */}
-      <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
-        <h2 className="font-semibold text-slate-800 mb-4">Dados do Membro</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {textFields.map(({ id, label, type, placeholder, span2 }) => (
-            <div key={id} className={span2 ? 'sm:col-span-2' : ''}>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">{label}</label>
-              <input {...register(id)} type={type} placeholder={placeholder}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" />
-              {errors[id] && <p className="text-xs text-red-500 mt-1">{errors[id]?.message}</p>}
-            </div>
-          ))}
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Setor</label>
-            <input {...register('setor')} type="text" placeholder="Ex: Sede, Fortaleza, Garcia"
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" />
+      <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8 sm:p-10 shadow-sm">
+        <h2 className="text-xl font-bold text-slate-900 mb-8 tracking-tight font-display">Informações Pessoais</h2>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7">
+          <div className="sm:col-span-2 space-y-2">
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-4 font-sans">Nome completo *</label>
+            <input {...register('nome')} type="text" placeholder="João da Silva"
+              className="w-full px-6 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all shadow-sm font-sans" />
+            {errors.nome && <p className="text-[10px] font-bold text-red-500 mt-1 ml-4">{errors.nome.message}</p>}
           </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Status</label>
-            <select {...register('status')}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white">
-              <option value="ativo">Ativo</option>
-              <option value="inativo">Inativo</option>
-            </select>
+
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-4 font-sans">WhatsApp</label>
+            <input type="text" {...register('whatsapp')} placeholder="(00) 00000-0000"
+              className="w-full px-6 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all shadow-sm font-sans" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-4 font-sans">Instagram</label>
+            <input type="text" {...register('instagram')} placeholder="@usuario"
+              className="w-full px-6 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all shadow-sm font-sans" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-4 font-sans">Responsável (nome)</label>
+            <input type="text" {...register('responsavel_nome')} placeholder="Nome do pai/mãe/responsável"
+              className="w-full px-6 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all shadow-sm font-sans" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-4 font-sans">Número do responsável</label>
+            <input type="text" {...register('responsavel_telefone')} placeholder="(00) 00000-0000"
+              className="w-full px-6 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all shadow-sm font-sans" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-4 font-sans">Data de Nascimento</label>
+            <input type="text" {...register('data_nascimento')} placeholder="Ex: 15/03/1995"
+              className="w-full px-6 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all shadow-sm font-sans" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-4 font-sans">Setor</label>
+            <input type="text" {...register('setor')} placeholder="Ex: Sede, Fortaleza, Garcia"
+              className="w-full px-6 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all shadow-sm font-sans" />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-4 font-sans">Status do Membro</label>
+            <div className="relative">
+              <select {...register('status')}
+                className="w-full px-6 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all shadow-sm appearance-none cursor-pointer font-sans">
+                <option value="ativo" className="bg-white font-sans">Membro Ativo</option>
+                <option value="inativo" className="bg-white font-sans">Membro Inativo</option>
+              </select>
+              <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" /></svg>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-4 pt-2">
         <button type="button" onClick={() => navigate(-1)}
-          className="flex items-center justify-center gap-2 px-5 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
-          <ArrowLeft className="w-4 h-4" /> Voltar
+          className="flex items-center justify-center gap-2 px-8 py-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-full text-sm font-bold text-slate-600 transition-all active:scale-95 font-sans">
+          <ArrowLeft className="w-5 h-5" /> Voltar
         </button>
         <button type="submit" disabled={saving}
-          className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+          className="flex-1 flex items-center justify-center gap-2.5 bg-[#b3f516] hover:bg-[#a3e114] text-black font-bold py-2.5 rounded-full shadow-md shadow-[#b3f516]/5 transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-60 disabled:scale-100 disabled:cursor-not-allowed font-sans">
           {saving
-            ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            : <Save className="w-4 h-4" />}
-          {saving ? 'Salvando...' : membro ? 'Atualizar Membro' : 'Cadastrar Membro'}
+            ? <span className="w-5 h-5 border-3 border-black/20 border-t-black rounded-full animate-spin" />
+            : <Save className="w-5 h-5" />}
+          {saving ? 'Processando...' : membro ? 'Salvar Alterações' : 'Finalizar Cadastro'}
         </button>
       </div>
     </form>
+
+    {/* Modal de Visualização */}
+    {showModal && fotoPreview && (
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-fade-in"
+        onClick={() => setShowModal(false)}>
+        <button className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all">
+          <X className="w-6 h-6" />
+        </button>
+        <img 
+          src={fotoPreview} 
+          alt="Visualização" 
+          className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl animate-zoom-in"
+          onClick={(e) => e.stopPropagation()} 
+        />
+      </div>
+    )}
+    </>
   );
 }
