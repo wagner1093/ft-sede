@@ -61,8 +61,8 @@ export default function TabelaMembros() {
                 <Icon className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-3xl font-black text-slate-900 tracking-tight font-display">{value}</p>
-                <p className="text-sm font-bold text-slate-400 uppercase tracking-widest text-[10px] font-sans">{label}</p>
+                <p className="text-3xl font-bold text-slate-900 tracking-tight font-display">{value}</p>
+                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest font-sans">{label}</p>
               </div>
             </div>
           </div>

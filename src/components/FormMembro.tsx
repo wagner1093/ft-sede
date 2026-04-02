@@ -32,7 +32,28 @@ export default function FormMembro({ membro }: Props) {
   const [saving, setSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const maskDate = (value: string) => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '$1/$2')
+      .replace(/(\d{2})(\d)/, '$1/$2')
+      .replace(/(\d{4})(\d+?)$/, '$1');
+  };
+
+  const formatDateToBR = (date: string) => {
+    if (!date) return '';
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
+  };
+
+  const formatDateToISO = (date: string) => {
+    if (!date) return null;
+    const [day, month, year] = date.split('/');
+    if (!day || !month || !year) return null;
+    return `${year}-${month}-${day}`;
+  };
+
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       nome: membro?.nome ?? '',
@@ -41,7 +62,7 @@ export default function FormMembro({ membro }: Props) {
       responsavel_nome: membro?.responsavel_nome ?? '',
       responsavel_telefone: membro?.responsavel_telefone ?? '',
       setor: membro?.setor ?? '',
-      data_nascimento: membro?.data_nascimento ?? '',
+      data_nascimento: membro?.data_nascimento ? formatDateToBR(membro.data_nascimento) : '',
       status: membro?.status ?? 'ativo',
     },
   });
@@ -64,7 +85,12 @@ export default function FormMembro({ membro }: Props) {
         const { data: urlData } = supabase.storage.from('fotos-membros').getPublicUrl(path);
         foto_url = urlData.publicUrl;
       }
-      const payload = { ...data, foto_url, data_nascimento: data.data_nascimento || null };
+      
+      const payload = { 
+        ...data, 
+        foto_url, 
+        data_nascimento: formatDateToISO(data.data_nascimento || '') 
+      };
 
       if (membro) {
         const { error } = await supabase.from('membros').update(payload).eq('id', membro.id);
@@ -159,8 +185,17 @@ export default function FormMembro({ membro }: Props) {
 
           <div className="space-y-2">
             <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-4 font-sans">Data de Nascimento</label>
-            <input type="text" {...register('data_nascimento')} placeholder="Ex: 15/03/1995"
-              className="w-full px-6 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all shadow-sm font-sans" />
+            <input 
+              type="text" 
+              {...register('data_nascimento')}
+              onChange={(e) => {
+                const masked = maskDate(e.target.value);
+                setValue('data_nascimento', masked);
+              }}
+              placeholder="Ex: 14/08/1998"
+              maxLength={10}
+              className="w-full px-6 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-primary-500 transition-all shadow-sm font-sans" 
+            />
           </div>
 
           <div className="space-y-2">
