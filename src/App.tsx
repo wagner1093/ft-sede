@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { PrivateRoute } from './PrivateRoute';
+import ScrollToTop from './components/ScrollToTop';
 import LoginPage from './pages/LoginPage';
 import MembrosPage from './pages/MembrosPage';
 import MembroNovoPage from './pages/MembroNovoPage';
@@ -10,6 +11,7 @@ import MembroDetalhesPage from './pages/MembroDetalhesPage';
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
       <Routes>
         <Route path="/login" element={<LoginPage />} />

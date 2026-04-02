@@ -5,6 +5,12 @@
 @tailwind utilities;
 
 @layer base {
+  html, body {
+    @apply overflow-x-hidden max-w-full;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
   body {
     @apply antialiased text-slate-900 bg-[#F7F7F7] font-sans;
   }

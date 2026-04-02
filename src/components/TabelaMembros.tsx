@@ -120,7 +120,7 @@ export default function TabelaMembros() {
   const batizadosEspirito = membros.filter(m => m.batismo_espirito_santo).length;
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 max-w-full overflow-x-hidden pb-8">
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {[
@@ -261,7 +261,7 @@ export default function TabelaMembros() {
       )}
 
       {/* Table Card */}
-      <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden transition-all">
+      <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm overflow-hidden transition-all min-h-[400px]">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="w-10 h-10 border-4 border-slate-100 border-t-primary-500 rounded-full animate-spin" />

@@ -24,8 +24,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4 bg-[#050505] transition-all">
-      <div className="w-full max-w-[400px] animate-fade-in relative">
+    <div className="min-h-screen relative flex items-center justify-center p-4 bg-[#050505] transition-all overflow-hidden">
+      <div className="w-full max-w-[400px] relative">
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mx-auto mb-6">
             <img src="/logo.png" alt="Logo" className="w-28 h-28 object-contain" />
