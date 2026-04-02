@@ -8,14 +8,14 @@ export interface Grupo {
 export interface Membro {
   id: string;
   nome: string;
-  telefone?: string;
-  telefone2?: string;
+  whatsapp?: string;
+  instagram?: string;
+  responsavel_nome?: string;
+  responsavel_telefone?: string;
   setor?: string;
-  grupo_id?: string;
   foto_url?: string;
   data_nascimento?: string;
-  email?: string;
-  endereco?: string;
+  grupo_id?: string;
   status: 'ativo' | 'inativo';
   created_at: string;
   updated_at?: string;
@@ -24,12 +24,11 @@ export interface Membro {
 
 export interface MembroFormData {
   nome: string;
-  telefone?: string;
-  telefone2?: string;
+  whatsapp?: string;
+  instagram?: string;
+  responsavel_nome?: string;
+  responsavel_telefone?: string;
   setor?: string;
-  grupo_id?: string;
   data_nascimento?: string;
-  email?: string;
-  endereco?: string;
   status: 'ativo' | 'inativo';
 }

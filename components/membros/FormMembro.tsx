@@ -6,20 +6,20 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase';
-import type { Membro, Grupo } from '@/lib/types';
+import type { Membro } from '@/lib/types';
 import toast from 'react-hot-toast';
-import CameraModal from './CameraModal';
-import { Camera, Save, ArrowLeft, User } from 'lucide-react';
+import { ImagePlus, Save, ArrowLeft, User, X } from 'lucide-react';
+
+const SETORES = ['Sede', 'Fortaleça', 'Garcia'];
 
 const schema = z.object({
   nome: z.string().min(2, 'Nome obrigatório'),
-  telefone: z.string().optional(),
-  telefone2: z.string().optional(),
+  whatsapp: z.string().optional(),
+  instagram: z.string().optional(),
+  responsavel_nome: z.string().optional(),
+  responsavel_telefone: z.string().optional(),
   setor: z.string().optional(),
-  grupo_id: z.string().optional(),
   data_nascimento: z.string().optional(),
-  email: z.string().email('Email inválido').optional().or(z.literal('')),
-  endereco: z.string().optional(),
   status: z.enum(['ativo', 'inativo']),
 });
 
@@ -30,36 +30,35 @@ interface Props { membro?: Membro }
 export default function FormMembro({ membro }: Props) {
   const router = useRouter();
   const supabase = createClient();
-  const [grupos, setGrupos] = useState<Grupo[]>([]);
   const [fotoFile, setFotoFile] = useState<File | null>(null);
   const [fotoPreview, setFotoPreview] = useState<string | null>(membro?.foto_url ?? null);
-  const [showCamera, setShowCamera] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       nome: membro?.nome ?? '',
-      telefone: membro?.telefone ?? '',
-      telefone2: membro?.telefone2 ?? '',
+      whatsapp: membro?.whatsapp ?? '',
+      instagram: membro?.instagram ?? '',
+      responsavel_nome: membro?.responsavel_nome ?? '',
+      responsavel_telefone: membro?.responsavel_telefone ?? '',
       setor: membro?.setor ?? '',
-      grupo_id: membro?.grupo_id ?? '',
       data_nascimento: membro?.data_nascimento ?? '',
-      email: membro?.email ?? '',
-      endereco: membro?.endereco ?? '',
       status: membro?.status ?? 'ativo',
     },
   });
 
-  useEffect(() => {
-    supabase.from('grupos').select('*').order('nome').then(({ data }) => {
-      if (data) setGrupos(data);
-    });
-  }, []);
+  function handleFotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFotoFile(file);
+      setFotoPreview(URL.createObjectURL(file));
+    }
+  }
 
-  function handleCameraCapture(file: File) {
-    setFotoFile(file);
-    setFotoPreview(URL.createObjectURL(file));
+  function removeFoto() {
+    setFotoFile(null);
+    setFotoPreview(null);
   }
 
   async function onSubmit(data: FormData) {
@@ -77,8 +76,11 @@ export default function FormMembro({ membro }: Props) {
         foto_url = urlData.publicUrl;
       }
 
-      const payload = { ...data, foto_url, grupo_id: data.grupo_id || null, email: data.email || null };
-
+      const payload = {
+        ...data,
+        foto_url,
+        data_nascimento: data.data_nascimento || null
+      };
       if (membro) {
         const { error } = await supabase.from('membros').update(payload).eq('id', membro.id);
         if (error) throw error;
@@ -97,14 +99,13 @@ export default function FormMembro({ membro }: Props) {
     }
   }
 
-  const fields = [
-    { id: 'nome', label: 'Nome completo *', type: 'text', placeholder: 'João da Silva' },
-    { id: 'telefone', label: 'Telefone', type: 'text', placeholder: '(11) 99999-9999' },
-    { id: 'telefone2', label: 'Telefone 2', type: 'text', placeholder: '(11) 99999-9999' },
-    { id: 'email', label: 'Email', type: 'email', placeholder: 'joao@email.com' },
-    { id: 'setor', label: 'Setor da Igreja', type: 'text', placeholder: 'Louvor, Diaconia...' },
-    { id: 'data_nascimento', label: 'Data de Nascimento', type: 'date', placeholder: '' },
-    { id: 'endereco', label: 'Endereço', type: 'text', placeholder: 'Rua, número, bairro...' },
+  const textFields = [
+    { id: 'nome',                label: 'Nome completo *',         type: 'text',  placeholder: 'João da Silva',        span2: true  },
+    { id: 'whatsapp',           label: 'WhatsApp',                type: 'text',  placeholder: '(11) 99999-9999',      span2: false },
+    { id: 'instagram',          label: 'Instagram',               type: 'text',  placeholder: '@usuario',             span2: false },
+    { id: 'responsavel_nome',   label: 'Responsável (nome)',      type: 'text',  placeholder: 'Nome do responsável',  span2: false },
+    { id: 'responsavel_telefone', label: 'Número do responsável', type: 'text',  placeholder: '(11) 99999-9999',      span2: false },
+    { id: 'data_nascimento',    label: 'Data de Nascimento',      type: 'date',  placeholder: '',                     span2: false },
   ] as const;
 
   return (
@@ -114,17 +115,23 @@ export default function FormMembro({ membro }: Props) {
       <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
         <h2 className="font-semibold text-slate-800 mb-4">Foto</h2>
         <div className="flex items-center gap-4">
-          <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-200">
+          <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-200 flex-shrink-0 relative">
             {fotoPreview
-              ? <img src={fotoPreview} alt="preview" className="w-full h-full object-cover" />
+              ? <>
+                  <img src={fotoPreview} alt="preview" className="w-full h-full object-cover" />
+                  <button type="button" onClick={removeFoto}
+                    className="absolute top-0.5 right-0.5 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                    <X className="w-3 h-3 text-white" />
+                  </button>
+                </>
               : <User className="w-8 h-8 text-slate-300" />
             }
           </div>
-          <button type="button" onClick={() => setShowCamera(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm font-medium hover:bg-blue-100 transition-colors border border-blue-100">
-            <Camera className="w-4 h-4" />
+          <label className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm font-medium hover:bg-blue-100 transition-colors border border-blue-100 cursor-pointer">
+            <ImagePlus className="w-4 h-4" />
             {fotoPreview ? 'Trocar foto' : 'Adicionar foto'}
-          </button>
+            <input type="file" accept="image/*" className="hidden" onChange={handleFotoChange} />
+          </label>
         </div>
       </div>
 
@@ -132,8 +139,9 @@ export default function FormMembro({ membro }: Props) {
       <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
         <h2 className="font-semibold text-slate-800 mb-4">Dados do Membro</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {fields.map(({ id, label, type, placeholder }) => (
-            <div key={id} className={id === 'nome' || id === 'endereco' ? 'sm:col-span-2' : ''}>
+
+          {textFields.map(({ id, label, type, placeholder, span2 }) => (
+            <div key={id} className={span2 ? 'sm:col-span-2' : ''}>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">{label}</label>
               <input
                 {...register(id)}
@@ -145,13 +153,13 @@ export default function FormMembro({ membro }: Props) {
             </div>
           ))}
 
-          {/* Grupo */}
+          {/* Setor */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Grupo / Célula</label>
-            <select {...register('grupo_id')}
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Setor</label>
+            <select {...register('setor')}
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white">
-              <option value="">Sem grupo</option>
-              {grupos.map(g => <option key={g.id} value={g.id}>{g.nome}</option>)}
+              <option value="">Selecione o setor</option>
+              {SETORES.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
 
@@ -164,6 +172,7 @@ export default function FormMembro({ membro }: Props) {
               <option value="inativo">Inativo</option>
             </select>
           </div>
+
         </div>
       </div>
 
@@ -182,9 +191,6 @@ export default function FormMembro({ membro }: Props) {
         </button>
       </div>
 
-      {showCamera && (
-        <CameraModal onCapture={handleCameraCapture} onClose={() => setShowCamera(false)} />
-      )}
     </form>
   );
 }
