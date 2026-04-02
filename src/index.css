@@ -182,3 +182,82 @@ img, svg, video, canvas, audio, iframe, embed, object {
   fill: rgb(175, 175, 175);
   transition: fill 0.2s;
 }
+
+/* Pacman Login Loader (Uiverse.io design) */
+.pacman-overlay {
+  @apply fixed inset-0 z-[300] flex items-center justify-center bg-[#050505] animate-fade-in;
+}
+
+.loader-wrapper {
+  position: relative;
+  width: 100px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-wrapper .packman::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  background-color: #EFF107;
+  border-radius: 100px 100px 0 0;
+  transform: translate(-50%, -50%);
+  animation: pac-top 0.5s linear infinite;
+  transform-origin: center bottom;
+}
+
+.loader-wrapper .packman::after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  background-color: #EFF107;
+  border-radius: 0 0 100px 100px;
+  transform: translate(-50%, 50%);
+  animation: pac-bot 0.5s linear infinite;
+  transform-origin: center top;
+}
+
+@keyframes pac-top {
+  0% { transform: translate(-50%, -50%) rotate(0) }
+  50% { transform: translate(-50%, -50%) rotate(-30deg) }
+  100% { transform: translate(-50%, -50%) rotate(0) }
+}
+
+@keyframes pac-bot {
+  0% { transform: translate(-50%, 50%) rotate(0) }
+  50% { transform: translate(-50%, 50%) rotate(30deg) }
+  100% { transform: translate(-50%, 50%) rotate(0) }
+}
+
+.dots {
+  position: absolute;
+  left: 30px;
+  display: flex;
+  gap: 20px;
+}
+
+.dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.dots .dot:nth-child(1) { animation: dot-stage1 0.5s infinite; }
+.dots .dot:nth-child(2) { animation: dot-stage1 0.5s infinite; }
+.dots .dot:nth-child(3) { animation: dot-stage1 0.5s infinite; }
+.dots .dot:nth-child(4) { animation: dot-stage2 0.5s infinite; }
+
+@keyframes dot-stage1 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-24px, 0); }
+}
+
+@keyframes dot-stage2 {
+  0% { transform: scale(1); }
+  5%, 100% { transform: scale(0); }
+}

@@ -10,17 +10,39 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showSuccessLoader, setShowSuccessLoader] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      
+      setShowSuccessLoader(true);
+      setTimeout(() => {
+        navigate('/membros');
+      }, 3000);
+    } catch (error: any) {
       toast.error('Email ou senha incorretos.');
-    } else {
-      navigate('/membros');
+      setLoading(false);
     }
-    setLoading(false);
+  }
+
+  if (showSuccessLoader) {
+    return (
+      <div className="pacman-overlay">
+        <div className="loader-wrapper">
+          <div className="packman" />
+          <div className="dots">
+            <div className="dot" />
+            <div className="dot" />
+            <div className="dot" />
+            <div className="dot" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
