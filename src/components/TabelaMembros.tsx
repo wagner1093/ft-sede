@@ -120,7 +120,7 @@ export default function TabelaMembros() {
   const batizadosEspirito = membros.filter(m => m.batismo_espirito_santo).length;
 
   return (
-    <div className="space-y-6 max-w-full overflow-x-hidden pb-8">
+    <div className="space-y-6 pb-8">
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         {[
@@ -174,7 +174,7 @@ export default function TabelaMembros() {
         </div>
 
         {showFilters && (
-          <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-100 animate-slide-up">
+          <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-100">
             {/* Setor Filter */}
             <div className="flex items-center gap-2 h-10 px-4 bg-slate-50 border border-slate-200 rounded-full">
               <MapPin className="w-4 h-4 text-slate-400" />
@@ -228,7 +228,7 @@ export default function TabelaMembros() {
 
       {/* Highlights Section: Adolescentes Sede */}
       {adolescentesSede > 0 && (
-        <div className="space-y-4 animate-slide-up">
+        <div className="space-y-4">
           <div className="flex items-center justify-between px-2">
             <h2 className="text-sm font-bold text-slate-800 uppercase tracking-widest flex items-center gap-2">
               <Smile className="w-4 h-4 text-purple-500" />

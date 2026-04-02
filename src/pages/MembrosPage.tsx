@@ -8,7 +8,7 @@ export default function MembrosPage() {
       <div className="absolute top-0 left-0 w-[50%] h-64 bg-primary-500/5 blur-[120px] rounded-full pointer-events-none" />
 
       <Navbar />
-      <main className="max-w-5xl mx-auto px-4 pt-8 relative z-10 animate-fade-in">
+      <main className="max-w-5xl mx-auto px-4 pt-8 relative z-10">
         <div className="mb-8 pl-2">
           <h1 className="text-3xl font-black text-slate-900 tracking-tight font-display">Painel de Membros</h1>
           <p className="text-slate-600 font-medium mt-2 font-sans">Visão geral do gerenciamento da Força Teen Sede</p>
