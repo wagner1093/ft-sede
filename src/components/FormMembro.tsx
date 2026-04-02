@@ -101,8 +101,15 @@ export default function FormMembro({ membro }: Props) {
         foto_url = urlData.publicUrl;
       }
       
+      const toTitleCase = (str: string) => {
+        if (!str) return '';
+        return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      };
+
       const payload = { 
         ...data, 
+        nome: toTitleCase(data.nome?.trim() || ''),
+        setor: toTitleCase(data.setor?.trim() || ''),
         foto_url, 
         data_nascimento: formatDateToISO(data.data_nascimento || ''),
         batismo_aguas_data: data.batismo_aguas ? formatDateToISO(data.batismo_aguas_data || '') : null,

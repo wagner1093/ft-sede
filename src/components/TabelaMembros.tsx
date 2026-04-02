@@ -74,8 +74,13 @@ export default function TabelaMembros() {
     async function loadFilterOptions() {
       const { data } = await supabase.from('membros').select('setor, departamento');
       if (data) {
-        setAvailableSetores(Array.from(new Set(data.map(m => m.setor).filter(Boolean))) as string[]);
-        setAvailableDeptos(Array.from(new Set(data.map(m => m.departamento).filter(Boolean))) as string[]);
+        const toTitleCase = (str: string) => str.trim().toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        
+        const setores = data.map(m => m.setor ? toTitleCase(m.setor) : null).filter(Boolean);
+        const deptos = data.map(m => m.departamento ? toTitleCase(m.departamento) : null).filter(Boolean);
+        
+        setAvailableSetores(Array.from(new Set(setores)) as string[]);
+        setAvailableDeptos(Array.from(new Set(deptos)) as string[]);
       }
     }
     loadFilterOptions();
@@ -109,9 +114,9 @@ export default function TabelaMembros() {
   };
 
   const total = membros.length;
-  const outrasIgrejas = membros.filter(m => m.setor && m.setor !== 'Sede').length;
+  const outrasIgrejas = membros.filter(m => m.setor && m.setor.trim().toLowerCase() !== 'sede').length;
   const adolescentesSede = membros.filter(m => 
-    m.setor === 'Sede' && 
+    m.setor?.trim().toLowerCase() === 'sede' && 
     m.data_nascimento && 
     calculateAge(m.data_nascimento) >= 12 && 
     calculateAge(m.data_nascimento) <= 18
@@ -238,7 +243,7 @@ export default function TabelaMembros() {
           </div>
           <div className="flex gap-4 overflow-x-auto pb-4 px-2 scrollbar-hide no-scrollbar -mx-2 sm:mx-0">
             {membros
-              .filter(m => m.setor === 'Sede' && m.data_nascimento && calculateAge(m.data_nascimento) >= 12 && calculateAge(m.data_nascimento) <= 18)
+              .filter(m => m.setor?.trim().toLowerCase() === 'sede' && m.data_nascimento && calculateAge(m.data_nascimento) >= 12 && calculateAge(m.data_nascimento) <= 18)
               .map(m => (
                 <Link key={m.id} to={`/membros/${m.id}`} 
                   className="flex-none w-40 bg-white p-4 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md hover:scale-[1.03] transition-all group">
