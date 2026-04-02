@@ -19,16 +19,4 @@ export interface Membro {
   status: 'ativo' | 'inativo';
   created_at: string;
   updated_at?: string;
-  grupos?: Grupo;
-}
-
-export interface MembroFormData {
-  nome: string;
-  whatsapp?: string;
-  instagram?: string;
-  responsavel_nome?: string;
-  responsavel_telefone?: string;
-  setor?: string;
-  data_nascimento?: string;
-  status: 'ativo' | 'inativo';
 }
