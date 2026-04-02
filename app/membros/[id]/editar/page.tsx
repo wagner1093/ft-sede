@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase-server';
 import FormMembro from '@/components/membros/FormMembro';
 import { notFound } from 'next/navigation';
 import { UserCog } from 'lucide-react';
