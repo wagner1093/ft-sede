@@ -38,7 +38,7 @@ export default function TabelaMembros() {
 
   const fetchMembros = useCallback(async () => {
     setLoading(true);
-    let query = supabase.from('membros').select('*').order('nome');
+    let query = supabase.from('appft_membros').select('*').order('nome');
     
     if (setorFilter !== 'todos') query = query.eq('setor', setorFilter);
     if (departamentoFilter !== 'todos') query = query.eq('departamento', departamentoFilter);
@@ -72,7 +72,7 @@ export default function TabelaMembros() {
 
   useEffect(() => {
     async function loadFilterOptions() {
-      const { data } = await supabase.from('membros').select('setor, departamento');
+      const { data } = await supabase.from('appft_membros').select('setor, departamento');
       if (data) {
         const toTitleCase = (str: string) => str.trim().toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         
@@ -97,7 +97,7 @@ export default function TabelaMembros() {
   async function handleDelete(id: string, nome: string) {
     if (!confirm(`Excluir "${nome}"? Esta ação não pode ser desfeita.`)) return;
     setDeleting(id);
-    const { error } = await supabase.from('membros').delete().eq('id', id);
+    const { error } = await supabase.from('appft_membros').delete().eq('id', id);
     if (error) toast.error('Erro ao excluir.');
     else { toast.success('Membro excluído.'); fetchMembros(); }
     setDeleting(null);

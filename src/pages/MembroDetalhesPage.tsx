@@ -14,12 +14,13 @@ export default function MembroDetalhesPage() {
   const navigate = useNavigate();
   const [membro, setMembro] = useState<Membro | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (!id) return;
-    supabase.from('membros').select('*').eq('id', id).single().then(({ data, error }) => {
+    supabase.from('appft_membros').select('*').eq('id', id).single().then(({ data, error }) => {
       if (error || !data) navigate('/membros');
       else setMembro(data);
       setLoading(false);
@@ -28,12 +29,14 @@ export default function MembroDetalhesPage() {
 
   async function handleDelete() {
     if (!membro) return;
+    setDeleting(true);
     
     // Agora a exclusão acontece sem o window.confirm aqui, 
     // pois o usuário já confirmou no modal customizado.
-    const { error } = await supabase.from('membros').delete().eq('id', membro.id);
+    const { error } = await supabase.from('appft_membros').delete().eq('id', membro.id);
     if (error) {
       toast.error('Erro ao excluir membro.');
+      setDeleting(false);
     } else {
       toast.success('Cadastro excluído com sucesso.');
       navigate('/membros');

@@ -13,7 +13,7 @@ export default function MembroEditarPage() {
 
   useEffect(() => {
     if (!id) return;
-    supabase.from('membros').select('*').eq('id', id).single().then(({ data, error }) => {
+    supabase.from('appft_membros').select('*').eq('id', id).single().then(({ data, error }) => {
       if (error || !data) navigate('/membros');
       else setMembro(data);
       setLoading(false);

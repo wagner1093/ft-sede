@@ -118,11 +118,11 @@ export default function FormMembro({ membro }: Props) {
       };
 
       if (membro) {
-        const { error } = await supabase.from('membros').update(payload).eq('id', membro.id);
+        const { error } = await supabase.from('appft_membros').update(payload).eq('id', membro.id);
         if (error) throw error;
         toast.success('Membro atualizado!');
       } else {
-        const { error } = await supabase.from('membros').insert(payload);
+        const { error } = await supabase.from('appft_membros').insert(payload);
         if (error) throw error;
         toast.success('Membro cadastrado!');
       }
