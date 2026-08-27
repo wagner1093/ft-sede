@@ -105,20 +105,20 @@ export default function PerguntasPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
           {[
             { label: 'Total', value: total, icon: Inbox, color: 'text-primary-600 bg-primary-500/10' },
             { label: 'Pendentes', value: pendentes, icon: Clock, color: 'text-amber-600 bg-amber-500/10' },
             { label: 'Respondidas', value: respondidas, icon: ListChecks, color: 'text-emerald-600 bg-emerald-500/10' },
           ].map(({ label, value, icon: Icon, color }) => (
-            <div key={label} className="bg-white rounded-[2rem] border border-slate-100 p-5 shadow-sm">
-              <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${color}`}>
-                  <Icon className="w-6 h-6" />
+            <div key={label} className="bg-white rounded-2xl sm:rounded-[2rem] border border-slate-100 p-3 sm:p-5 shadow-sm">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+                <div className={`w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center flex-shrink-0 ${color}`}>
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <div>
-                  <p className="text-3xl font-bold text-slate-900 tracking-tight font-display">{value}</p>
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest font-sans">{label}</p>
+                <div className="min-w-0">
+                  <p className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight font-display leading-none">{value}</p>
+                  <p className="text-[9px] sm:text-[10px] font-semibold text-slate-400 uppercase tracking-wide sm:tracking-widest font-sans mt-1 truncate">{label}</p>
                 </div>
               </div>
             </div>
@@ -126,10 +126,10 @@ export default function PerguntasPage() {
         </div>
 
         {/* Filter tabs */}
-        <div className="flex items-center gap-2 mb-6 bg-white p-1.5 rounded-full border border-slate-200 shadow-sm w-fit">
+        <div className="flex items-center gap-1 sm:gap-2 mb-6 bg-white p-1.5 rounded-full border border-slate-200 shadow-sm w-full sm:w-fit">
           {TABS.map(t => (
             <button key={t.key} onClick={() => setFiltro(t.key)}
-              className={`px-5 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${
+              className={`flex-1 sm:flex-none justify-center px-2 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 sm:gap-2 whitespace-nowrap ${
                 filtro === t.key ? 'bg-slate-900 text-white shadow-md' : 'text-slate-500 hover:text-slate-800'
               }`}>
               {t.label}
