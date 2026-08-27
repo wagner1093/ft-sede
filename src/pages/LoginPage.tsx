@@ -18,7 +18,9 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      // Permite entrar digitando só o usuário (ex: "pastor") — completa como e-mail interno
+      const loginEmail = email.includes('@') ? email.trim() : `${email.trim().toLowerCase()}@ftsede.app`;
+      const { error } = await supabase.auth.signInWithPassword({ email: loginEmail, password });
       if (error) throw error;
       
       setShowSuccessLoader(true);
@@ -68,7 +70,9 @@ export default function LoginPage() {
             <div>
             <input
                 id="email"
-                type="email"
+                type="text"
+                autoCapitalize="none"
+                autoCorrect="off"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="E-mail ou usuário"

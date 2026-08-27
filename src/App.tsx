@@ -7,6 +7,8 @@ import MembrosPage from './pages/MembrosPage';
 import MembroNovoPage from './pages/MembroNovoPage';
 import MembroEditarPage from './pages/MembroEditarPage';
 import MembroDetalhesPage from './pages/MembroDetalhesPage';
+import PerguntarPage from './pages/PerguntarPage';
+import PerguntasPage from './pages/PerguntasPage';
 
 export default function App() {
   return (
@@ -15,6 +17,8 @@ export default function App() {
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/pergunta" element={<PerguntarPage />} />
+        <Route path="/perguntas" element={<PrivateRoute><PerguntasPage /></PrivateRoute>} />
         <Route path="/membros" element={<PrivateRoute><MembrosPage /></PrivateRoute>} />
         <Route path="/membros/novo" element={<PrivateRoute><MembroNovoPage /></PrivateRoute>} />
         <Route path="/membros/:id" element={<PrivateRoute><MembroDetalhesPage /></PrivateRoute>} />

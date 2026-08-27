@@ -5,6 +5,14 @@ export interface Grupo {
   created_at: string;
 }
 
+export interface Pergunta {
+  id: string;
+  pergunta: string;
+  respondido: boolean;
+  respondido_at?: string | null;
+  created_at: string;
+}
+
 export interface Membro {
   id: string;
   nome: string;

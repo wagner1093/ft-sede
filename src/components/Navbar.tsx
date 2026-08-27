@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { Users, LogOut } from 'lucide-react';
+import { Users, LogOut, MessageCircleQuestion } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function Navbar() {
@@ -24,6 +24,9 @@ export default function Navbar() {
           <div className="hidden sm:flex items-center gap-1 mr-2 pr-2 border-r border-slate-200">
             <Link to="/membros" className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
               <Users className="w-4 h-4" /> Membros
+            </Link>
+            <Link to="/perguntas" className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all">
+              <MessageCircleQuestion className="w-4 h-4" /> Perguntas
             </Link>
           </div>
 
